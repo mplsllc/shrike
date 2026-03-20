@@ -9,7 +9,7 @@
     <p class="text-muted mt-1">Looking up WHOIS data...</p>
 </div>
 
-<div class="bg-surface-900 border border-steel/30 rounded-lg p-8 mb-8 text-center"
+<div id="lookup-spinner" class="bg-surface-900 border border-steel/30 rounded-lg p-8 mb-8 text-center"
      hx-get="/domain/{{.DomainName}}/poll"
      hx-trigger="every 2s"
      hx-swap="outerHTML"
@@ -21,4 +21,17 @@
     <p class="text-muted text-sm">Querying WHOIS servers for <strong class="text-breast">{{.DomainName}}</strong></p>
     <p class="text-surface-600 text-xs mt-2">This typically takes 3-10 seconds</p>
 </div>
+<script>
+    setTimeout(function() {
+        var el = document.getElementById('lookup-spinner');
+        if (el) {
+            el.innerHTML = '<p class="text-breast text-lg mb-2">No WHOIS history found</p>' +
+                '<p class="text-muted">We couldn\'t retrieve WHOIS data for <strong>{{.DomainName}}</strong>.</p>' +
+                '<p class="text-muted text-sm mt-3">The WHOIS server may be unreachable or this TLD may not be supported yet.</p>';
+            el.removeAttribute('hx-get');
+            el.removeAttribute('hx-trigger');
+            htmx.process(el);
+        }
+    }, 30000);
+</script>
 {{end}}

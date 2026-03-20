@@ -114,35 +114,51 @@ func (h *WebHandler) Home(c *gin.Context) {
 func (h *WebHandler) DomainPage(c *gin.Context) {
 	name := strings.ToLower(c.Param("name"))
 
-	// Try cache/DB first
-	result, isAsync, err := h.lookup.Lookup(c.Request.Context(), name, false)
-	if err != nil {
-		h.render(c, "domain", gin.H{
-			"Domain": models.Domain{Name: name, TLD: domainTLD(name)},
-			"Error":  "Something went wrong",
-		})
-		return
+	// If redirected from poll after lookup completed/failed, just show what we have
+	// without triggering another async lookup
+	skipLookup := c.Query("done") == "1"
+
+	if !skipLookup {
+		result, isAsync, err := h.lookup.Lookup(c.Request.Context(), name, false)
+		if err != nil {
+			h.render(c, "domain", gin.H{
+				"Domain": models.Domain{Name: name, TLD: domainTLD(name)},
+				"Error":  "Something went wrong",
+			})
+			return
+		}
+
+		if isAsync {
+			h.render(c, "domain_loading", gin.H{
+				"DomainName": name,
+			})
+			return
+		}
+
+		if result != nil && result.Domain != nil {
+			h.render(c, "domain", gin.H{
+				"Domain":   result.Domain,
+				"Snapshot": result.Snapshot,
+				"DNS":      result.DNS,
+			})
+			return
+		}
 	}
 
-	if isAsync {
-		// Live lookup started — show loading page with htmx polling
-		h.render(c, "domain_loading", gin.H{
-			"DomainName": name,
-		})
-		return
-	}
-
-	if result == nil || result.Domain == nil {
+	// No data — either skipped lookup or lookup returned nothing.
+	// Check DB directly for whatever we have.
+	domain, _ := h.domainRepo.GetByName(c.Request.Context(), name)
+	if domain != nil {
+		snap, _ := h.domainRepo.GetLatestSnapshot(c.Request.Context(), domain.ID)
 		h.render(c, "domain", gin.H{
-			"Domain": models.Domain{Name: name, TLD: domainTLD(name)},
+			"Domain":   domain,
+			"Snapshot": snap,
 		})
 		return
 	}
 
 	h.render(c, "domain", gin.H{
-		"Domain":   result.Domain,
-		"Snapshot": result.Snapshot,
-		"DNS":      result.DNS,
+		"Domain": models.Domain{Name: name, TLD: domainTLD(name)},
 	})
 }
 
@@ -154,12 +170,12 @@ func (h *WebHandler) DomainPoll(c *gin.Context) {
 	status := h.lookup.GetInflightStatus(name)
 	switch status {
 	case services.StatusReady:
-		c.Redirect(http.StatusFound, "/domain/"+name)
+		c.Redirect(http.StatusFound, "/domain/"+name+"?done=1")
 	case services.StatusError:
-		c.Redirect(http.StatusFound, "/domain/"+name)
+		c.Redirect(http.StatusFound, "/domain/"+name+"?done=1")
 	case services.StatusUnknown:
 		// Lookup finished and was cleaned up — redirect to result
-		c.Redirect(http.StatusFound, "/domain/"+name)
+		c.Redirect(http.StatusFound, "/domain/"+name+"?done=1")
 	default:
 		// Still fetching — return the same loading HTML for htmx to re-poll
 		h.render(c, "domain_loading", gin.H{

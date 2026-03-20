@@ -93,8 +93,15 @@
     </p>
 </div>
 {{else}}
-<div class="bg-surface-900 border border-surface-600 rounded-lg p-6 mb-8 text-muted">
-    No WHOIS data available yet.
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-8 mb-8 text-center">
+    {{if .Error}}
+    <p class="text-danger text-lg mb-2">Lookup failed</p>
+    <p class="text-muted">{{.Error}}</p>
+    {{else}}
+    <p class="text-breast text-lg mb-2">No WHOIS history found</p>
+    <p class="text-muted">We don't have any WHOIS records for <strong>{{.Domain.Name}}</strong> yet.</p>
+    <p class="text-muted text-sm mt-3">This can happen if the domain doesn't exist, the WHOIS server is unreachable, or the TLD isn't supported yet.</p>
+    {{end}}
 </div>
 {{end}}
 </div>
