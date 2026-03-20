@@ -1,0 +1,124 @@
+MPLS License (MPLS Principled Libre Software)
+Version 1.0
+Copyright © 2025 MPLS LLC, Minneapolis, Minnesota
+
+PERMITTED USE
+
+Free to use for:
+  - Individuals, anywhere in the world
+  - Organizations under $1M annual revenue AND under 100K users
+  - Nonprofits and educational institutions of any size
+  - Researchers and students
+  - Open source projects
+
+Attribution required in all cases. Credit the origin.
+Credit the creators. That is the minimum the commons asks.
+
+LARGE ORGANIZATION USE
+
+Organizations exceeding $1M annual revenue OR 100K users
+must either:
+
+  (a) Contribute modifications back under this license, or
+  (b) Obtain a commercial license from MPLS LLC
+
+This is reciprocity, not punishment. The commons made
+your scale possible. The commons asks something back.
+
+CREATOR RIGHTS
+
+You own what you build with this software. This includes
+work created with AI assistance or any other tool.
+
+The idea was yours. The direction was yours. The judgment
+of what to keep and what to discard was yours.
+That is authorship. That is ownership.
+
+No platform, institution, government, or AI system has
+any claim to what you made. A paintbrush doesn't own the
+painting. A compiler doesn't own the program. A powerful
+assistant doesn't own the idea it helped realize.
+
+If you made it, it is yours.
+
+PROHIBITED USE — NO EXCEPTIONS
+
+The following uses are prohibited regardless of payment,
+size, government mandate, or any other circumstance.
+
+Violation immediately and irrevocably terminates all
+rights granted under this license. There is no cure
+period. There is no path to reinstatement.
+
+  1. SURVEILLANCE
+     This software may not be used to build systems that
+     track, monitor, or profile individuals without their
+     meaningful informed consent. This includes mass
+     surveillance infrastructure, location tracking,
+     behavioral profiling, social credit systems, or any
+     system designed to monitor people without their
+     knowledge.
+
+  2. WEAPONS
+     This software may not be used in the development,
+     targeting, guidance, or operation of weapons systems
+     of any kind. This includes autonomous weapons, drone
+     targeting, missile guidance, cyberweapons designed
+     to cause physical harm, and any military application
+     where this software contributes to the harm or death
+     of people.
+
+  3. OPPRESSION
+     This software may not be used to suppress political
+     dissent, restrict freedom of expression, or identify,
+     target, or harm individuals for their beliefs,
+     ethnicity, religion, sexuality, or political views.
+     This includes enforcing laws that criminalize
+     identity or belief.
+
+  4. MANIPULATION
+     This software may not be used to build systems
+     designed to manipulate human behavior, belief, or
+     decision-making without disclosure. This includes
+     algorithmic radicalization systems, coordinated
+     inauthentic behavior infrastructure, and mass
+     psychological manipulation platforms.
+
+  5. AI TRAINING EXTRACTION
+     This software and works created with it may not be
+     used as training data for commercial AI systems
+     without the explicit permission of the human creator
+     of that work. The human creator retains full rights
+     regardless of what tools they used to create.
+     Automated collection without permission is a
+     violation of this license regardless of its
+     technical form.
+
+  6. SECRET GOVERNMENT COMPLIANCE
+     If any entity is compelled by government order to
+     modify this software in ways that weaken its
+     security, privacy, or integrity guarantees, that
+     entity must publicly disclose the existence of such
+     an order to the maximum extent permitted by law.
+     Silent compliance with orders that harm users is
+     prohibited. If disclosure is legally prevented, the
+     entity must cease distribution rather than distribute
+     a secretly compromised version.
+
+These restrictions are absolute. They are not unlockable
+by payment. They are not subject to exception.
+They are the price of using this software.
+We consider it a fair price.
+
+WARRANTY
+
+This software is provided as-is without warranty of any
+kind. The authors are not liable for damages arising from
+its use.
+
+FULL LICENSE AND PHILOSOPHY
+
+See PHILOSOPHY.md for the complete text, values,
+reasoning, and the tradition this license continues.
+
+Contact: mp.ls
