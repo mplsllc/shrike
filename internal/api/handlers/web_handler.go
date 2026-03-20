@@ -84,6 +84,7 @@ func NewWebHandler(
 		"privacy":        filepath.Join(templateDir, "pages", "privacy.html"),
 		"docs":           filepath.Join(templateDir, "pages", "docs.html"),
 		"graph":          filepath.Join(templateDir, "pages", "graph.html"),
+		"license":        filepath.Join(templateDir, "pages", "license.html"),
 	}
 
 	base := template.Must(template.New("base").Funcs(funcMap).ParseFiles(baseFiles...))
@@ -232,6 +233,10 @@ func (h *WebHandler) StatusPage(c *gin.Context) {
 
 func (h *WebHandler) PrivacyPage(c *gin.Context) {
 	h.render(c, "privacy", nil)
+}
+
+func (h *WebHandler) LicensePage(c *gin.Context) {
+	h.render(c, "license", nil)
 }
 
 func (h *WebHandler) DocsPage(c *gin.Context) {

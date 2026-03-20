@@ -86,6 +86,7 @@ func NewRouter(deps RouterDeps) *gin.Engine {
 	r.GET("/asn/:number", webHandler.ASNPage)
 	r.GET("/status", webHandler.StatusPage)
 	r.GET("/privacy", webHandler.PrivacyPage)
+	r.GET("/license", webHandler.LicensePage)
 	r.GET("/docs", webHandler.DocsPage)
 	r.GET("/graph/:name", webHandler.GraphPage)
 	r.POST("/api/v1/redaction-request", redactionHandler.SubmitRequest)
