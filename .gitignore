@@ -1,0 +1,44 @@
+# Binaries
+/shrike-*
+/server
+*.exe
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+/dist/
+/bin/
+
+# Data exports
+/exports/
+
+# Zone files and downloaded data
+/data/
+
+# Logs
+*.log
+
+# Temporary/downloaded data files
+*.db.gz
+*.db.bz2
+*.sql.zst
+*.jsonl.zst
+
+# Claude Code instructions (not needed for runtime)
+CLAUDE.md
+
+# Private reference docs
+/.private/

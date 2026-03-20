@@ -1,0 +1,76 @@
+
+
+
+{{define "title"}}Privacy{{end}}
+
+{{define "content"}}
+<h1 class="text-3xl font-bold mb-8">Privacy & Data Handling</h1>
+
+<div class="prose prose-invert max-w-none space-y-6 text-breast text-sm leading-relaxed">
+
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6">
+    <h2 class="text-lg font-semibold text-breast mb-3">What We Collect</h2>
+    <p>Shrike stores publicly available WHOIS, DNS, IP, and ASN data from authoritative sources.
+    We do not scrape private databases or circumvent privacy protections.</p>
+    <p class="mt-2">Most gTLD WHOIS data is already GDPR-redacted by registrars. When personal
+    information is redacted at the source, we store the redacted version.</p>
+</div>
+
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6">
+    <h2 class="text-lg font-semibold text-breast mb-3">PII Handling</h2>
+    <p>Some ccTLDs still expose registrant names, emails, and addresses. When we detect
+    personal information in a WHOIS response, we flag it internally (<code class="bg-surface-800 px-1 rounded">contains_pii</code>).</p>
+    <ul class="list-disc ml-6 mt-2 space-y-1">
+        <li><strong>No PII search.</strong> You cannot search by personal email, phone, or address.</li>
+        <li><strong>Bulk exports redact PII.</strong> Personal contact fields are stripped from data exports.</li>
+        <li><strong>Individual domain lookups</strong> return data as-received from the authoritative WHOIS server.</li>
+    </ul>
+</div>
+
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6">
+    <h2 class="text-lg font-semibold text-breast mb-3">Removal Requests</h2>
+    <p>Any individual can request removal of their personal information from our historical
+    snapshots. We comply within 30 days.</p>
+    <p class="mt-2">We remove: registrant names, contact details, personal email addresses.</p>
+    <p class="mt-1">We do not remove: registrar names, nameservers, IP assignments, DNS records,
+    or organizational/corporate registration data.</p>
+</div>
+
+<div class="bg-surface-900 border border-steel/30 rounded-lg p-6">
+    <h2 class="text-lg font-semibold text-breast mb-3">Request Data Removal</h2>
+    <form action="/api/v1/redaction-request" method="POST" class="space-y-4">
+        <div>
+            <label for="email" class="block text-muted mb-1">Your email</label>
+            <input type="email" name="email" id="email" required
+                class="w-full px-4 py-2 bg-surface-900 border border-surface-600 rounded-lg text-breast
+                       focus:outline-none focus:border-steel" />
+        </div>
+        <div>
+            <label for="domain" class="block text-muted mb-1">Domain name (optional)</label>
+            <input type="text" name="domain" id="domain"
+                class="w-full px-4 py-2 bg-surface-900 border border-surface-600 rounded-lg text-breast
+                       focus:outline-none focus:border-steel"
+                placeholder="example.com" />
+        </div>
+        <div>
+            <label for="description" class="block text-muted mb-1">What data should be removed?</label>
+            <textarea name="description" id="description" rows="3" required
+                class="w-full px-4 py-2 bg-surface-900 border border-surface-600 rounded-lg text-breast
+                       focus:outline-none focus:border-steel"
+                placeholder="Describe the personal information you'd like removed..."></textarea>
+        </div>
+        <button type="submit"
+            class="px-6 py-2 bg-steel text-breast rounded-lg hover:brightness-110 transition">
+            Submit Request
+        </button>
+    </form>
+</div>
+
+<p class="text-muted text-xs">
+    This policy reflects the values of the
+    <a href="/license" class="text-steel hover:underline">MPLS Principled Libre Software License</a>:
+    people first, always.
+</p>
+
+</div>
+{{end}}

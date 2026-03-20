@@ -1,0 +1,69 @@
+
+
+
+{{define "title"}}Status{{end}}
+
+{{define "content"}}
+<h1 class="text-3xl font-bold mb-8">Service Status</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-surface-900 border border-surface-600 rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4 text-breast">Database</h2>
+        <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+                <span class="text-muted">Status</span>
+                <span class="text-sage">{{.DBStatus}}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-muted">Domains</span>
+                <span class="text-breast">{{.Stats.Domains}}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-muted">WHOIS Snapshots</span>
+                <span class="text-breast">{{.Stats.Snapshots}}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-muted">IP Blocks</span>
+                <span class="text-breast">{{.Stats.IPBlocks}}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-muted">ASNs</span>
+                <span class="text-breast">{{.Stats.ASNs}}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-muted">DNS Records</span>
+                <span class="text-breast">{{.Stats.DNSRecords}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-surface-900 border border-surface-600 rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4 text-breast">Crawler</h2>
+        <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+                <span class="text-muted">Status</span>
+                <span class="text-breast">{{.CrawlerStatus}}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-muted">Queue Depth</span>
+                <span class="text-breast">{{.QueueDepth}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6">
+    <h2 class="text-lg font-semibold mb-4 text-breast">About</h2>
+    <p class="text-muted text-sm leading-relaxed">
+        Shrike is a free, open WHOIS history database. We collect and preserve
+        historical WHOIS, DNS, IP, and ASN data — making it freely searchable
+        and downloadable. An alternative to paid services like DomainTools and
+        WhoisXML API.
+    </p>
+    <p class="text-muted text-sm mt-3 leading-relaxed">
+        All data is available via the <a href="/docs" class="text-steel hover:underline">REST API</a>
+        and as <a href="/exports" class="text-steel hover:underline">periodic bulk exports</a>.
+        Licensed under <a href="/license" class="text-steel hover:underline">MPLS Principled Libre Software v1.0</a>.
+    </p>
+</div>
+{{end}}

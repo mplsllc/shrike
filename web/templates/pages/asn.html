@@ -1,0 +1,64 @@
+
+
+
+{{define "title"}}AS{{.ASN.Number}}{{end}}
+
+{{define "content"}}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold">AS{{.ASN.Number}}</h1>
+    <p class="text-muted mt-1">
+        RIR: <span class="text-breast">{{.ASN.RIR}}</span>
+        &middot; First seen: <span class="text-breast">{{.ASN.FirstSeen.Format "2006-01-02"}}</span>
+    </p>
+</div>
+
+{{if .Snapshot}}
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-breast">ASN Info</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        {{if .Snapshot.Name}}
+        <div>
+            <span class="text-muted">AS Name</span>
+            <p class="text-breast">{{deref .Snapshot.Name}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.OrgName}}
+        <div>
+            <span class="text-muted">Organization</span>
+            <p class="text-breast">{{deref .Snapshot.OrgName}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.Country}}
+        <div>
+            <span class="text-muted">Country</span>
+            <p class="text-breast">{{deref .Snapshot.Country}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.Description}}
+        <div class="md:col-span-2">
+            <span class="text-muted">Description</span>
+            <p class="text-breast">{{deref .Snapshot.Description}}</p>
+        </div>
+        {{end}}
+    </div>
+    <p class="mt-4 text-xs text-surface-600">
+        Snapshot from {{.Snapshot.ObservedAt.Format "2006-01-02 15:04 UTC"}}
+        &middot; Source: {{.Snapshot.Source}}
+    </p>
+</div>
+{{end}}
+
+<!-- Announced Prefixes -->
+{{if .Prefixes}}
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-breast">Announced Prefixes</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+        {{range .Prefixes}}
+        <a href="/ip/{{.Prefix}}" class="px-3 py-2 bg-surface-800 rounded text-sm font-mono text-steel hover:brightness-110 transition">
+            {{.Prefix}}
+        </a>
+        {{end}}
+    </div>
+</div>
+{{end}}
+{{end}}

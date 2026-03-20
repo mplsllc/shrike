@@ -1,0 +1,93 @@
+
+{{define "title"}}Graph — {{.Label}}{{end}}
+
+{{define "content"}}
+<div class="mb-4 flex items-center justify-between">
+    <div>
+        <h1 class="text-2xl font-bold">Relationship Graph</h1>
+        <p class="text-muted text-sm">{{.Label}}</p>
+    </div>
+    <a href="/domain/{{.Label}}" class="text-sm text-steel hover:underline">Back to detail</a>
+</div>
+
+<div id="graph-container" class="bg-surface-900 border border-surface-600 rounded-lg" style="height: 600px; position: relative;">
+    <svg id="graph-svg" width="100%" height="100%"></svg>
+</div>
+
+<div class="mt-4 flex gap-4 text-xs text-muted">
+    <span><span class="inline-block w-3 h-3 rounded-full bg-steel mr-1"></span>Domain</span>
+    <span><span class="inline-block w-3 h-3 rounded-full bg-sage mr-1"></span>IP</span>
+    <span><span class="inline-block w-3 h-3 rounded-full bg-amber mr-1"></span>ASN</span>
+    <span><span class="inline-block w-3 h-3 rounded-full bg-purple-500 mr-1"></span>Nameserver</span>
+    <span><span class="inline-block w-3 h-3 rounded-full bg-rust mr-1"></span>Registrar</span>
+</div>
+{{end}}
+
+{{define "head"}}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+{{end}}
+
+{{define "scripts"}}
+<script>
+const graphData = {{.GraphJSON}};
+const colors = {
+    domain: '#4A7FA5', ip: '#87A96B', asn: '#D4A853',
+    nameserver: '#a855f7', registrar: '#B7583F'
+};
+const radius = { domain: 20, ip: 14, asn: 16, nameserver: 12, registrar: 14 };
+
+const container = document.getElementById('graph-container');
+const svg = d3.select('#graph-svg');
+const width = container.clientWidth;
+const height = container.clientHeight;
+
+const simulation = d3.forceSimulation(graphData.nodes)
+    .force('link', d3.forceLink(graphData.edges).id(d => d.id).distance(120))
+    .force('charge', d3.forceManyBody().strength(-300))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(d => (radius[d.type] || 12) + 5));
+
+const link = svg.append('g')
+    .selectAll('line')
+    .data(graphData.edges)
+    .join('line')
+    .attr('stroke', '#374151')
+    .attr('stroke-width', 1.5);
+
+const node = svg.append('g')
+    .selectAll('g')
+    .data(graphData.nodes)
+    .join('g')
+    .call(d3.drag()
+        .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+        .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+        .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
+    );
+
+node.append('circle')
+    .attr('r', d => radius[d.type] || 12)
+    .attr('fill', d => colors[d.type] || '#6b7280')
+    .attr('stroke', '#1f2937')
+    .attr('stroke-width', 2)
+    .style('cursor', 'pointer');
+
+node.append('text')
+    .text(d => d.label.length > 25 ? d.label.substring(0, 22) + '...' : d.label)
+    .attr('dy', d => (radius[d.type] || 12) + 14)
+    .attr('text-anchor', 'middle')
+    .attr('fill', '#9ca3af')
+    .attr('font-size', '11px');
+
+node.on('click', (event, d) => {
+    if (d.type === 'domain') window.location.href = '/domain/' + d.label;
+    else if (d.type === 'ip') window.location.href = '/ip/' + d.label;
+    else if (d.type === 'asn') window.location.href = '/asn/' + d.label.replace(/^AS/, '').split(' ')[0];
+});
+
+simulation.on('tick', () => {
+    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+    node.attr('transform', d => `translate(${d.x},${d.y})`);
+});
+</script>
+{{end}}

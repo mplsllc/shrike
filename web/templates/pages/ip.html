@@ -1,0 +1,73 @@
+
+
+
+{{define "title"}}{{.IPBlock.CIDR}}{{end}}
+
+{{define "content"}}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold font-mono">{{.Address}}</h1>
+    {{if .IPBlock}}
+    <p class="text-muted mt-1">
+        Block: <span class="text-breast font-mono">{{.IPBlock.CIDR}}</span>
+        &middot; RIR: <span class="text-breast">{{.IPBlock.RIR}}</span>
+        &middot; IPv{{.IPBlock.Version}}
+    </p>
+    {{end}}
+</div>
+
+{{if .Snapshot}}
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-breast">IP WHOIS</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        {{if .Snapshot.NetName}}
+        <div>
+            <span class="text-muted">Network Name</span>
+            <p class="text-breast">{{deref .Snapshot.NetName}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.OrgName}}
+        <div>
+            <span class="text-muted">Organization</span>
+            <p class="text-breast">{{deref .Snapshot.OrgName}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.Country}}
+        <div>
+            <span class="text-muted">Country</span>
+            <p class="text-breast">{{deref .Snapshot.Country}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.Status}}
+        <div>
+            <span class="text-muted">Status</span>
+            <p class="text-breast">{{deref .Snapshot.Status}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.AbuseContact}}
+        <div>
+            <span class="text-muted">Abuse Contact</span>
+            <p class="text-breast">{{deref .Snapshot.AbuseContact}}</p>
+        </div>
+        {{end}}
+    </div>
+    <p class="mt-4 text-xs text-surface-600">
+        Snapshot from {{.Snapshot.ObservedAt.Format "2006-01-02 15:04 UTC"}}
+        &middot; Source: {{.Snapshot.Source}}
+    </p>
+</div>
+{{else}}
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6 mb-8 text-muted">
+    No IP WHOIS data available.
+</div>
+{{end}}
+
+<!-- Hosted domains -->
+<div class="mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-breast">Domains at this IP</h2>
+    <div hx-get="/api/v1/ips/{{.Address}}/domains?limit=20"
+         hx-trigger="load" hx-swap="innerHTML"
+         class="text-sm text-muted">
+        Loading...
+    </div>
+</div>
+{{end}}

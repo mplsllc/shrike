@@ -1,0 +1,137 @@
+
+
+{{define "title"}}{{.Domain.Name}}{{end}}
+
+{{define "content"}}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-breast">{{.Domain.Name}}</h1>
+    <p class="text-muted mt-1">
+        .{{.Domain.TLD}}
+        {{if .Domain.LastCrawled}}
+        &middot; Last crawled {{.Domain.LastCrawled.Format "2006-01-02 15:04 UTC"}}
+        {{end}}
+    </p>
+</div>
+
+<div id="loading-indicator" class="hidden">
+    <div class="bg-surface-900 border border-steel/30 rounded-lg p-6 mb-8">
+        <div class="flex items-center gap-3">
+            <div class="animate-spin h-5 w-5 border-2 border-steel border-t-transparent rounded-full"></div>
+            <span class="text-ash" id="loading-message">Fetching live WHOIS data...</span>
+        </div>
+    </div>
+</div>
+
+<div id="whois-card">
+{{if .Snapshot}}
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-ash">Current WHOIS</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        {{if .Snapshot.Registrar}}
+        <div>
+            <span class="text-muted">Registrar</span>
+            <p class="text-breast">{{deref .Snapshot.Registrar}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.RegistrantOrg}}
+        <div>
+            <span class="text-muted">Registrant Org</span>
+            <p class="text-breast">{{deref .Snapshot.RegistrantOrg}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.CreatedDate}}
+        <div>
+            <span class="text-muted">Created</span>
+            <p class="text-breast">{{.Snapshot.CreatedDate.Format "2006-01-02"}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.ExpiryDate}}
+        <div>
+            <span class="text-muted">Expires</span>
+            <p class="text-breast">{{.Snapshot.ExpiryDate.Format "2006-01-02"}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.UpdatedDate}}
+        <div>
+            <span class="text-muted">Updated</span>
+            <p class="text-breast">{{.Snapshot.UpdatedDate.Format "2006-01-02"}}</p>
+        </div>
+        {{end}}
+        {{if .Snapshot.DNSSEC}}
+        <div>
+            <span class="text-muted">DNSSEC</span>
+            <p class="text-breast">{{if derefBool .Snapshot.DNSSEC}}Signed{{else}}Unsigned{{end}}</p>
+        </div>
+        {{end}}
+    </div>
+
+    {{if .Snapshot.NameServers}}
+    <div class="mt-4">
+        <span class="text-muted text-sm">Nameservers</span>
+        <div class="flex flex-wrap gap-2 mt-1">
+            {{range .Snapshot.NameServers}}
+            <span class="px-2 py-1 bg-surface-800 border border-surface-600 rounded text-sm text-ash">{{.}}</span>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+
+    {{if .Snapshot.StatusCodes}}
+    <div class="mt-4">
+        <span class="text-muted text-sm">Status</span>
+        <div class="flex flex-wrap gap-2 mt-1">
+            {{range .Snapshot.StatusCodes}}
+            <span class="px-2 py-1 bg-surface-800 border border-surface-600 rounded text-xs text-muted">{{.}}</span>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+
+    <p class="mt-4 text-xs text-surface-600">
+        Snapshot from {{.Snapshot.ObservedAt.Format "2006-01-02 15:04 UTC"}}
+        &middot; Source: {{.Snapshot.Source}}
+    </p>
+</div>
+{{else}}
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6 mb-8 text-muted">
+    No WHOIS data available yet.
+</div>
+{{end}}
+</div>
+
+{{if .DNS}}
+<div class="bg-surface-900 border border-surface-600 rounded-lg p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-ash">DNS Records</h2>
+    <table class="w-full text-sm">
+        <thead>
+            <tr class="text-muted border-b border-surface-600">
+                <th class="text-left py-2 pr-4">Type</th>
+                <th class="text-left py-2 pr-4">Name</th>
+                <th class="text-left py-2 pr-4">Value</th>
+                <th class="text-left py-2">TTL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .DNS}}
+            <tr class="border-b border-surface-700">
+                <td class="py-2 pr-4 text-steel font-mono">{{.RecordType}}</td>
+                <td class="py-2 pr-4 text-ash">{{.Name}}</td>
+                <td class="py-2 pr-4 text-breast font-mono text-xs">{{.Value}}</td>
+                <td class="py-2 text-muted">{{if .TTL}}{{derefInt .TTL}}{{end}}</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>
+{{end}}
+
+<div class="mb-8">
+    <h2 class="text-lg font-semibold mb-4 text-ash">Change History</h2>
+    <div id="history-timeline"
+         hx-get="/domain/{{.Domain.Name}}/timeline"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+        <p class="text-muted text-sm">Loading history...</p>
+    </div>
+</div>
+{{end}}
