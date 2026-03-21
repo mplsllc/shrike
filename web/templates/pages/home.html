@@ -19,11 +19,21 @@
                 autocomplete="off"
                 autofocus
             />
-            <button type="submit"
+            <button type="submit" id="search-btn"
                 class="absolute right-2 top-2 px-5 py-2 bg-steel text-breast rounded-md
-                       hover:brightness-110 transition font-medium">
+                       hover:brightness-110 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled>
                 Lookup
             </button>
+        </div>
+        <div class="mt-3 flex justify-center">
+            <altcha-widget
+                challengeurl="/altcha-challenge"
+                auto="onfocus"
+                hidelogo
+                hidefooter
+                style="--altcha-max-width: 100%;"
+            ></altcha-widget>
         </div>
     </form>
 
@@ -36,6 +46,17 @@
 
 {{define "scripts"}}
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const widget = document.querySelector('altcha-widget');
+    const btn = document.getElementById('search-btn');
+
+    if (widget) {
+        widget.addEventListener('verified', function() {
+            btn.disabled = false;
+        });
+    }
+});
+
 function handleSearch(event) {
     event.preventDefault();
     const q = document.getElementById('search-input').value.trim();

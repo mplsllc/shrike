@@ -59,6 +59,9 @@ func NewRouter(deps RouterDeps) *gin.Engine {
 	// Static files
 	r.Static("/static", "web/static")
 
+	// ALTCHA challenge endpoint (before bot protection — must be accessible)
+	r.GET("/altcha-challenge", handlers.AltchaChallenge)
+
 	// Handlers
 	domainHandler := handlers.NewDomainHandler(deps.DomainRepo, deps.LookupService, deps.Cache)
 	apiKeyHandler := handlers.NewAPIKeyHandler(deps.Pool)
