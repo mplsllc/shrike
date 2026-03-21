@@ -31,7 +31,7 @@ echo "BEGIN;" > "$SQL_FILE"
 
 head -n "$COUNT" "$TRANCO_FILE" | while IFS=, read -r rank domain; do
     # Escape single quotes in domain names (shouldn't happen but be safe)
-    domain=$(echo "$domain" | tr -d "'")
+    domain=$(echo "$domain" | tr -d "'\r\n")
     cat >> "$SQL_FILE" << EOSQL
 INSERT INTO crawl_jobs (job_type, target, priority, state, next_run_at)
 VALUES ('domain_whois', '${domain}', 5, 'pending', NOW())
